@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+  Fragmento reutilizable del menú de navegación.
+  Uso en cualquier vista:  <div th:replace="~{fragments/menu :: menu('clientes')}"></div>
+  El parámetro 'activo' marca la opción actual: inicio | clientes | catalogo | pedidos
+-->
+<header th:fragment="menu(activo)" class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/}">Portal de gestión comercial</a>
+        <nav class="menu">
+            <a th:href="@{/}" th:classappend="${activo == 'inicio'} ? 'active'">Inicio</a>
+            <a th:href="@{/customers}" th:classappend="${activo == 'clientes'} ? 'active'">Clientes</a>
+            <a th:href="@{/products}" th:classappend="${activo == 'catalogo'} ? 'active'">Catálogo</a>
+            <a th:href="@{/orders}" th:classappend="${activo == 'pedidos'} ? 'active'">Pedidos</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Mensajes flash (éxito / error) reutilizables -->
+<div th:fragment="flash">
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+</div>
+
+</body>
+</html>
