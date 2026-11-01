@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle del pedido - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('pedidos')}"></div>
+
+<main class="container">
+    <div class="toolbar">
+        <h1 th:text="${invoice.type} + ' N.º ' + ${invoice.id}">Factura N.º 1</h1>
+        <a class="btn btn-secondary" th:href="@{/orders}">Volver al listado</a>
+    </div>
+
+    <div th:replace="~{fragments/menu :: flash}"></div>
+
+    <div class="form-card wide meta">
+        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(invoice.date, 'dd/MM/yyyy')}">01/01/2026</span></p>
+        <p><strong>Cliente:</strong> <span th:text="${invoice.customer.name}">Cliente</span></p>
+        <p><strong>Documento:</strong>
+            <span th:text="${invoice.customer.documentType + ' ' + invoice.customer.document}">DNI 12345678</span></p>
+    </div>
+
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th class="num">Cantidad</th>
+            <th class="num">Precio unit. (S/)</th>
+            <th class="num">Subtotal (S/)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${invoice.details}">
+            <td th:text="${d.product.name}">Producto</td>
+            <td class="num" th:text="${d.quantity}">1</td>
+            <td class="num" th:text="${#numbers.formatDecimal(d.price, 1, 'COMMA', 2, 'POINT')}">0.00</td>
+            <td class="num" th:text="${#numbers.formatDecimal(d.subtotal, 1, 'COMMA', 2, 'POINT')}">0.00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="total-box">Total: S/ <span th:text="${#numbers.formatDecimal(invoice.total, 1, 'COMMA', 2, 'POINT')}">0.00</span></p>
+</main>
+</body>
+</html>
