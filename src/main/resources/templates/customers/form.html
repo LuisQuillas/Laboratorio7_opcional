@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cliente - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('clientes')}"></div>
+
+<main class="container">
+    <!-- Una única vista para crear y editar: depende de si el cliente ya tiene id -->
+    <h1 th:text="${customer.id == null} ? 'Nuevo cliente' : 'Editar cliente'">Nuevo cliente</h1>
+
+    <div th:replace="~{fragments/menu :: flash}"></div>
+
+    <form class="form-card" method="post" th:action="@{/customers}" th:object="${customer}" novalidate>
+        <input type="hidden" th:field="*{id}">
+
+        <div class="field" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" th:field="*{name}" maxlength="100" autofocus>
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
+        </div>
+
+        <div class="field" th:classappend="${#fields.hasErrors('documentType')} ? 'has-error'">
+            <label for="documentType">Tipo de documento</label>
+            <select id="documentType" th:field="*{documentType}">
+                <option value="">-- Seleccione --</option>
+                <option th:each="t : ${documentTypes}" th:value="${t}" th:text="${t}">DNI</option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('documentType')}" th:errors="*{documentType}">Error</span>
+        </div>
+
+        <div class="field" th:classappend="${#fields.hasErrors('document')} ? 'has-error'">
+            <label for="document">Número de documento</label>
+            <input type="text" id="document" th:field="*{document}" maxlength="11" inputmode="numeric">
+            <span class="error" th:if="${#fields.hasErrors('document')}" th:errors="*{document}">Error</span>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn">Guardar</button>
+            <a class="btn btn-secondary" th:href="@{/customers}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clientes - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('clientes')}"></div>
+
+<main class="container">
+    <div class="toolbar">
+        <h1>Clientes</h1>
+        <a class="btn" th:href="@{/customers/new}">Nuevo cliente</a>
+    </div>
+
+    <div th:replace="~{fragments/menu :: flash}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo de documento</th>
+            <th>Número de documento</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${customers}">
+            <td th:text="${c.id}">1</td>
+            <td th:text="${c.name}">Nombre</td>
+            <td><span class="badge" th:text="${c.documentType}">DNI</span></td>
+            <td th:text="${c.document}">12345678</td>
+            <td>
+                <a class="btn btn-secondary btn-sm" th:href="@{/customers/{id}/edit(id=${c.id})}">Editar</a>
+                <form class="inline" method="post" th:action="@{/customers/{id}/delete(id=${c.id})}"
+                      onsubmit="return confirm('¿Eliminar este cliente?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(customers)}">
+            <td colspan="5" class="empty">No hay clientes registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
