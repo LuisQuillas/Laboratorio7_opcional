@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registrar pedido - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('pedidos')}"></div>
+
+<main class="container">
+    <h1>Registrar pedido</h1>
+
+    <form class="form-card wide" method="post" th:action="@{/orders}" th:object="${orderForm}" novalidate>
+
+        <!-- Errores globales: reglas que dependen de varios campos (p. ej. tipo de comprobante vs. documento) -->
+        <div class="alert alert-error" th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" style="margin:2px 0">Error global</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="field" th:classappend="${#fields.hasErrors('type')} ? 'has-error'">
+                <label for="type">Tipo de comprobante</label>
+                <select id="type" th:field="*{type}">
+                    <option value="">-- Seleccione --</option>
+                    <option th:each="t : ${types}" th:value="${t}" th:text="${t}">Factura</option>
+                </select>
+                <span class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Error</span>
+            </div>
+
+            <div class="field" th:classappend="${#fields.hasErrors('date')} ? 'has-error'">
+                <label for="date">Fecha</label>
+                <input type="date" id="date" th:field="*{date}">
+                <span class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Error</span>
+            </div>
+
+            <div class="field" th:classappend="${#fields.hasErrors('customerId')} ? 'has-error'">
+                <label for="customerId">Cliente</label>
+                <select id="customerId" th:field="*{customerId}">
+                    <option value="">-- Seleccione --</option>
+                    <option th:each="c : ${customers}" th:value="${c.id}" th:text="${c.label}">Cliente</option>
+                </select>
+                <span class="error" th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}">Error</span>
+            </div>
+        </div>
+
+        <h2>Productos</h2>
+        <span class="error" th:if="${#fields.hasErrors('items')}" th:errors="*{items}">Error</span>
+
+        <table class="items-table">
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="items-body">
+            <tr class="item-row" th:each="item, st : *{items}">
+                <td>
+                    <select th:field="*{items[__${st.index}__].productId}">
+                        <option value="">-- Seleccione --</option>
+                        <option th:each="p : ${products}" th:value="${p.id}"
+                                th:text="${p.name + ' — S/ ' + #numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT') + ' — stock: ' + p.stock}">Producto</option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('items[__${st.index}__].productId')}"
+                          th:errors="*{items[__${st.index}__].productId}">Error</span>
+                </td>
+                <td>
+                    <input type="text" inputmode="numeric" th:field="*{items[__${st.index}__].quantity}">
+                    <span class="error" th:if="${#fields.hasErrors('items[__${st.index}__].quantity')}"
+                          th:errors="*{items[__${st.index}__].quantity}">Error</span>
+                </td>
+                <td><button type="button" class="btn btn-secondary btn-sm remove-row">Quitar</button></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p><button type="button" class="btn btn-secondary btn-sm" id="add-row">+ Agregar producto</button></p>
+        <p class="error" style="color:#6b7280">
+            El subtotal de cada línea y el total del pedido se calculan en el servidor al registrar.
+        </p>
+
+        <div class="actions">
+            <button type="submit" class="btn">Registrar pedido</button>
+            <a class="btn btn-secondary" th:href="@{/orders}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<!-- Este script solo agrega/quita filas del formulario; NO realiza ningún cálculo -->
+<script th:src="@{/js/order-form.js}"></script>
+</body>
+</html>

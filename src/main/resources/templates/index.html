@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('inicio')}"></div>
+
+<main class="container">
+    <h1>Portal de gestión comercial</h1>
+
+    <p class="lead">
+        Aplicación web interna de la distribuidora para mantener el catálogo de productos,
+        registrar clientes (DNI o RUC) y emitir pedidos de venta, que en este laboratorio
+        representan un comprobante simplificado (Factura o Boleta).
+    </p>
+
+    <section class="cards">
+        <a class="card" th:href="@{/customers}">
+            <h2>Clientes</h2>
+            <p>Registrar, consultar, editar y eliminar clientes con su tipo y número de documento.</p>
+        </a>
+        <a class="card" th:href="@{/products}">
+            <h2>Catálogo</h2>
+            <p>Administrar los productos disponibles: nombre, precio y stock.</p>
+        </a>
+        <a class="card" th:href="@{/orders}">
+            <h2>Pedidos</h2>
+            <p>Emitir facturas y boletas con uno o más productos y revisar los pedidos registrados.</p>
+        </a>
+    </section>
+</main>
+</body>
+</html>

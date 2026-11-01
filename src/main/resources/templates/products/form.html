@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Producto - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('catalogo')}"></div>
+
+<main class="container">
+    <h1 th:text="${product.id == null} ? 'Nuevo producto' : 'Editar producto'">Nuevo producto</h1>
+
+    <!-- Un solo formulario para crear y editar: los campos se vinculan con th:object y th:field -->
+    <form class="form-card" method="post" th:action="@{/products}" th:object="${product}" novalidate>
+        <input type="hidden" th:field="*{id}">
+
+        <div class="field" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" th:field="*{name}" maxlength="100" autofocus>
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
+        </div>
+
+        <!-- Se usa type="text" a propósito: así se puede escribir letras y se prueba el manejo de errores de conversión -->
+        <div class="field" th:classappend="${#fields.hasErrors('price')} ? 'has-error'">
+            <label for="price">Precio (S/)</label>
+            <input type="text" id="price" th:field="*{price}" inputmode="decimal">
+            <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Error</span>
+        </div>
+
+        <div class="field" th:classappend="${#fields.hasErrors('stock')} ? 'has-error'">
+            <label for="stock">Stock disponible</label>
+            <input type="text" id="stock" th:field="*{stock}" inputmode="numeric">
+            <span class="error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}">Error</span>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn">Guardar</button>
+            <a class="btn btn-secondary" th:href="@{/products}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

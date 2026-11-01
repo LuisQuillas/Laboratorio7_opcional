@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catálogo - Portal de gestión comercial</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu('catalogo')}"></div>
+
+<main class="container">
+    <div class="toolbar">
+        <h1>Catálogo de productos</h1>
+        <a class="btn" th:href="@{/products/new}">Nuevo producto</a>
+    </div>
+
+    <div th:replace="~{fragments/menu :: flash}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th class="num">Precio (S/)</th>
+            <th class="num">Stock</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.id}">1</td>
+            <td th:text="${p.name}">Producto</td>
+            <td class="num" th:text="${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}">0.00</td>
+            <td class="num" th:text="${p.stock}">0</td>
+            <td>
+                <a class="btn btn-secondary btn-sm" th:href="@{/products/{id}/edit(id=${p.id})}">Editar</a>
+                <form class="inline" method="post" th:action="@{/products/{id}/delete(id=${p.id})}"
+                      onsubmit="return confirm('¿Eliminar este producto?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(products)}">
+            <td colspan="5" class="empty">No hay productos registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
