@@ -45,16 +45,6 @@ La aplicación **no** crea ni modifica tablas (`spring.jpa.hibernate.ddl-auto=no
 
 ## Desplegar
 
-### Opción A – Docker Compose (MySQL + aplicación)
-
-```bash
-docker compose up --build
-```
-
-Abre <http://localhost:8080>. La base `lab6` se crea automáticamente con `sql/lab6.sql`.
-
-### Opción B – JAR en un servidor / VM en la nube
-
 ```bash
 mvn clean package
 export DB_URL="jdbc:mysql://HOST:3306/lab6?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Lima"
@@ -63,10 +53,7 @@ export DB_PASSWORD=clave
 java -jar target/laboratorio7.jar
 ```
 
-### Opción C – Plataformas con Dockerfile (Render, Railway, etc.)
-
-Usar el `Dockerfile` de la raíz, definir `DB_URL`, `DB_USER`, `DB_PASSWORD` apuntando a una MySQL gestionada
-(con el script `sql/lab6.sql` ya ejecutado). La plataforma inyecta `PORT`. Health check: `/actuator/health`.
+Health check: `/actuator/health`.
 
 ## Pruebas
 
